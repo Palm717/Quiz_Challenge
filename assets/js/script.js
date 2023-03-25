@@ -1,91 +1,96 @@
-// Get HTML elements
+// SET GLOBAL HTML ELEMENTS-- I AM GRABBING THE ELEMENT BY ITS ATTRIBUTE FROM THE DOCUMENT DOM BY USING A DIRECT METHOD OF APPROACH RATHER THAN A TAG
 var startButton = document.getElementById("start");
 var questionText = document.getElementById("questions");
 var answerButtons = document.getElementById("answers");
 var timerElement = document.getElementById("timer");
 var highScoreLink = document.getElementById("storage");
 
-// Set quiz variables
-var currentQuestion = 0;
-var score = 0;
-var timeLeft = 60;
+// HERE I SET THE VARIABLES THAT WERE USED IN MY QUIZ PROGRAM
+var currentQuestion = 0; //INDEX THE CURRENT QUESTION FROM THE QUIZQANDA ARRAY
+var score = 0; // START THE USER SCORE FROM 0
+var timeLeft = 60; //START THE TIMER AT 60 AND THEN DECREMENT
 var timerInterval;
 
-// Start the quiz when the start button is clicked
-startButton.addEventListener("click", startQuiz);
+// THE USER IS SHOWN A START BUTTON AT THE BEGNNING OF THE QUIZ. ON 'CLICK' THE  QUIZ BEGINS TO RUN
+startButton.addEventListener("click", startQuiz); // ON CLICK RUN THE START QUIZ FUNCTION
 
 function startQuiz() {
-  // Hide start button
+  // HIDES THE START BUTTON ON CLICK
   startButton.style.display = "none";
 
-  // Display first question
+  // BEGIN DISPLAYING MY QUESTIONS TO THE USER
   displayQuestion();
 
-  // Start the timer
+  // WHILE THE QUESTIONS ARE STARTED A TIMER COUNTDOWN IS ALSO STARTED GIVING THE USER NOTIFICATION IN THE TOP RIGHT CORNER THAT THIS QUIZ IS COUNTING DOWN
   timerInterval = setInterval(function () {
-    timeLeft--;
+    timeLeft--; // DECREMENTS BY A SINGLE SECOND AS THE QUIZ PROGRESSES
     timerElement.textContent = "Timer: " + timeLeft;
+
+    //  STOPS THE QUIZ REGARDLESS IF THE USER HAS FINISHED QUESTIONS OR NOT BECAUSE THE TIMER HAS HIT 0 AND THE CLOCK IS OVER-- BALL GAME DONE
     if (timeLeft <= 0) {
       clearInterval(timerInterval);
       endQuiz();
     }
-  }, 1000);
+  }, 1000); //1 MULITPLE OF 1000MS IS A SECOND
 
-  // End the quiz when it is complete
+  // AT THE END OF THE QUESTION LENGTH WITHIN ITS OBJECT THE QUIZ IS ENDED BECAUSE THERE IS NO MORE QUESTIONS TO BE ENTERTAINED
   if (currentQuestion >= quizQAndA.length) {
+    //ASKS THE PROGRAM TO CHECK IF THERE'S ANY MORE QUESTIONS, SINCE THE INDEX CANNOT GO FURTHER THAN THE QUESTIONS PROVIDED THE QUIZ WILL SUBSEQUENTLY END
     endQuiz();
   }
 }
 
-// Display the current question and answer choices
+// ASK THE PROGRAM TO DISPLAY QUESTIONS AND ANSWERS
 function displayQuestion() {
-  // Clear previous answer buttons
-  answerButtons.innerHTML = "";
+  // CLEARS THE BUTTONS FROM ANY LINGERING ANSWERS FROM THE PREVIOUS QUESTION
+  answerButtons.innerHTML = ""; //BY DOT NOTATING THE BUTTONS WITH THE INNER HTML METHOD AND ASSIGNING AN EMPTY STRING I WAS ABLE TO CLEAR THE ANSWERS
 
-  // Display question text
+  // DISPLAY THE CURRENT QUESTION WITHIN THE TEXT CONTENT OF THE QUESTION ELEMENT THAT HAS BEEN TARGETED GLOBALLY WITH AN ID ATTRIBUTE
   questionText.textContent = quizQAndA[currentQuestion].question;
 
-  // Create answer buttons
+  // CREATION OF THE BUTTONS FOR THE ANSWERS BY TARGETING THE ELEMENT WITH THE ATTRIBUTE ID OF #ANSWERS
   quizQAndA[currentQuestion].answer.forEach(function (answer) {
-    var button = document.createElement("button");
-    button.textContent = answer;
+    var button = document.createElement("button"); //CREATE A BUTTON
+    button.textContent = answer; //I AM ASKING THE BUTTONS TEXT TO DISPLAY THE CORRESPONDING ANSWER FROM THE ANSWER ARRAY TO THIS BUTTON
     button.addEventListener("click", checkAnswer);
-    answerButtons.appendChild(button);
+    answerButtons.appendChild(button); //PUSH THE CONTENT OF THE BUTTON TO THE ANSWER BUTTON
   });
 }
 
-// Check if the user selected the correct answer
+// DID THE USER CREATE A CORRECT ANSWER
 function checkAnswer(event) {
-  var selectedAnswer = event.target.textContent;
-  var correctAnswer = quizQAndA[currentQuestion].correct;
+  var selectedAnswer = event.target.textContent; //CHECKS A CLICK EVENT ON AN ANSWER HOPEFULLY RETRIEVING A CORRECT ONE
+  var correctAnswer = quizQAndA[currentQuestion].correct; // CHECKS INSIDE THE CURRENT QUESTION ARRAY AND THEN LOOPS OVER THE QUESTIONS FINDING THE CORRECT KEY AND ITS VALUE
 
   if (selectedAnswer === correctAnswer) {
-    score += 10;
-    timeLeft += 10;
+    //IF THE CLICK EVENT IS SUCCESSFUL IT SHOULD STRICTLY EQUAL THE -CORRECT- ANSWER FROM THE CURRENT QUESTION
+    score += 10; // ADDING 10 POINTS FOR A CORRECT SELECTION
   } else {
-    timeLeft -= 10;
+    timeLeft -= 10; // REDUCES 10 SECONDS IN THE EVENT OF AN INCORRECT ANSWER
   }
 
-  // Move to the next question or end the quiz
+  // AFTER THE INTIAL CLICK EVENT OF THE PREVIOUS QUESTION I WANT TO MOVE ALONG TO THE NEXT QUESTION
   if (currentQuestion >= quizQAndA.length) {
-    endQuiz();
+    endQuiz(); //IF THE CURRENT QUESTION HAS MADE IT TO THE END AND IS NOW EQUAL TO THE LENGTH OF THE ENTIRE QUIZQANDA ARRAY THERES NOTHING LEFT TO DO BUT END THE QUIZ
   } else {
-    currentQuestion++;
+    currentQuestion++; //IF THE USER HAS NOT MADE IT TO THE LAST QUESTION AND THERE IS STILL MORE QUESTIONS TO INCREMENT OVER-- THEN MOVE ALONG AND DISPLLAY A NEW QUESTION
     displayQuestion();
   }
 }
 
-// End the quiz and show the score
+// END THE QUIZ WHILE  DISPLAYING A SCORE FOR THE USER
 function endQuiz() {
-  clearInterval(timerInterval);
+  clearInterval(timerInterval); //CLEAR THE TIMER WITH AN END OF THE GAME CLOCK OF 0
   timerElement.textContent = "Timer: 0";
 
-  // Hide question and answer elements
+  // HHIDE EVERYTHING EXCEPT FOR THE SCORE
   questionText.style.display = "none";
   answerButtons.style.display = "none";
 
-  // Display final score
-  var scoreText = document.createElement("p");
+  // MAKE IT KNOWN TO THE USER WHAT THEIR SCORE WAS
+  var scoreText = document.createElement("p"); //CREATE A PARAGRAPH ELEMENT THAT DISPLAYS TO THE USER THEIR SCORE
   scoreText.textContent = "Your final score is " + score;
   document.body.appendChild(scoreText);
 }
+
+//I COULD NOT GET THE SCORE OR THE LOCALSTORAGE TO WORK FOR THE LIFE OF ME
