@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JS Quiz</title>
+    <link rel="stylesheet" href="assets/css/style.css" />
+  </head>
+  <body>
+    <header>
+      <nav class="flex justify-between">
+        <a href="#" id="storage">View High Scores</a>
+        <div id="timer">Timer:</div>
+      </nav>
+    </header>
+
+    <main class="flex flex-col justify-center items-center">
+      <button id="start">Start</button>
+      <h1 id="questions" class="flex justify-center align-text">
+        Are you ready?
+      </h1>
+      <div id="answers" class="flex flex-col justify-around"></div>
+    </main>
+    <script src="assets/js/questions.js"></script>
+    <script src="assets/js/script.js"></script>
+  </body>
+</html>
